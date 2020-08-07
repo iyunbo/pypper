@@ -15,6 +15,7 @@ setup(
     version='0.1.0',
     description='A developer toolbox not only for Python',
     long_description=readme,
+    long_description_content_type='text/markdown',
     author='Yunbo WANG',
     author_email='w.yunbo@gmail.com',
     url='https://github.com/iyunbo/pypper',
