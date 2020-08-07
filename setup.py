@@ -12,7 +12,7 @@ with open("LICENSE") as f:
 
 setup(
     name="pypper",
-    version="0.1.0",
+    version="0.1.1",
     description="A developer toolbox not only for Python",
     author="Yunbo WANG",
     author_email="w.yunbo@gmail.com",
