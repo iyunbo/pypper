@@ -1,4 +1,4 @@
-from src.pypper.string import strings
+from pypper.pypper.string import strings
 
 
 def test_to_str():
