@@ -1,4 +1,4 @@
-from pypper.pypper.io.json import deserialize, jsonize, serialize
+from pypper.io.json import deserialize, jsonize, serialize
 
 
 def test_json_ser_and_deser_on_simple_obj():

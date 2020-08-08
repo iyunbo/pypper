@@ -1,7 +1,7 @@
 import logging as log
 import time
 
-from pypper.pypper.perf.tracing import perf, profiling
+from pypper.perf.tracing import perf, profiling
 
 
 def test_perf_tracing():
