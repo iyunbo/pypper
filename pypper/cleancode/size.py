@@ -1,11 +1,15 @@
 from enum import Enum
 
 SIZE_SCALE_FACTOR = 1024
+MINIMUM_SIZE = 0
 
 
 class FileSize:
     def __init__(self, size: int):
-        self.size = size
+        if Unit.Infinite.value >= size >= MINIMUM_SIZE:
+            self.size = size
+        else:
+            raise ValueError(f"file size out of bounds [{MINIMUM_SIZE} - {Unit.Infinite.value}]: {size}")
 
     def __eq__(self, other):
         if type(other) is not FileSize:
@@ -14,18 +18,16 @@ class FileSize:
 
     def __str__(self):
 
-        unit = SizeUnit.of(self.size)
+        unit = Unit.of(self.size)
         value = self.size / unit.value
 
-        if SizeUnit.Bytes.value < self.size < SizeUnit.Undefined.value:
+        if Unit.Bytes.value < self.size < Unit.Infinite.value:
             return f"{value:.2f} {unit.name}"
-        elif 0 <= self.size <= 1:
-            return f"{self.size} Byte"
         else:
-            return SizeUnit.Undefined.name
+            return f"{self.size} Byte"
 
 
-class SizeUnit(Enum):
+class Unit(Enum):
     Bytes = SIZE_SCALE_FACTOR ** 0
     KB = SIZE_SCALE_FACTOR ** 1
     MB = SIZE_SCALE_FACTOR ** 2
@@ -34,12 +36,10 @@ class SizeUnit(Enum):
     PB = SIZE_SCALE_FACTOR ** 5
     EB = SIZE_SCALE_FACTOR ** 6
     ZB = SIZE_SCALE_FACTOR ** 7
-    Undefined = SIZE_SCALE_FACTOR ** 8
+    Infinite = SIZE_SCALE_FACTOR ** 8
 
     @staticmethod
     def of(raw_size) -> Enum:
-        for unit in SizeUnit:
+        for unit in Unit:
             if raw_size < unit.value * SIZE_SCALE_FACTOR:
                 return unit
-
-        return SizeUnit.Undefined

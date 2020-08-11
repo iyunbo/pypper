@@ -1,27 +1,29 @@
 import sys
 from os.path import isfile
 
-from pypper.cleancode.codeview import FileView
+import pytest
+
+from pypper.cleancode.code_tidiness import FileTidiness
 from pypper.cleancode.size import FileSize
 
 
 def test_fileview_creation():
-    fileview = FileView(__file__)
+    fileview = FileTidiness(__file__)
 
 
 def test_valid_file_path():
-    fileview = FileView(__file__)
+    fileview = FileTidiness(__file__)
     assert fileview.file_path == __file__
     assert isfile(fileview.file_path)
 
 
 def test_get_file_size():
-    fileview = FileView(__file__)
+    fileview = FileTidiness(__file__)
     assert fileview.size
 
 
 def test_get_size_in_bytes():
-    fileview = FileView("Sample.java")
+    fileview = FileTidiness("Sample.java")
     assert fileview.size == FileSize(150)
 
 
@@ -50,9 +52,20 @@ def test_file_size_tb():
     assert str(filesize) == "1.33 TB"
 
 
-def test_file_size_undefined():
-    assert str(FileSize(sys.maxsize ** 10)) == "Undefined"
-    assert str(FileSize(-1)) == "Undefined"
+def test_file_too_big_size():
+    with pytest.raises(ValueError) as error:
+        assert str(FileSize(sys.maxsize ** 10))
+    assert caused_by_out_of_bounds(error)
+
+
+def caused_by_out_of_bounds(error):
+    return "file size out of bounds" in str(error.value)
+
+
+def test_file_negative_size():
+    with pytest.raises(ValueError) as error:
+        assert str(FileSize(-1))
+    caused_by_out_of_bounds(error)
 
 
 def test_file_size_does_not_equal_to_other_type():
