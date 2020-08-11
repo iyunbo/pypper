@@ -1,5 +1,6 @@
 import sys
 from os.path import isfile
+import pathlib
 
 import pytest
 
@@ -23,7 +24,8 @@ def test_get_file_size():
 
 
 def test_get_size_in_bytes():
-    fileview = FileTidiness("Sample.java")
+    dir_path = pathlib.Path(__file__).absolute()
+    fileview = FileTidiness(str(dir_path.with_name("Sample.java")))
     assert fileview.size == FileSize(150)
 
 
