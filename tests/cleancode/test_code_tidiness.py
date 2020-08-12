@@ -1,6 +1,6 @@
+import pathlib
 import sys
 from os.path import isfile
-import pathlib
 
 import pytest
 
@@ -24,9 +24,14 @@ def test_get_file_size():
 
 
 def test_get_size_in_bytes():
-    dir_path = pathlib.Path(__file__).absolute()
-    fileview = FileTidiness(str(dir_path.with_name("Sample.java")))
+    fileview = FileTidiness(sample())
     assert fileview.size == FileSize(150)
+
+
+def sample(filename="Sample.java"):
+    dir_path = pathlib.Path(__file__).absolute()
+    sample_file = str(dir_path.with_name(filename))
+    return sample_file
 
 
 def test_file_size_human_readable_display():
@@ -72,3 +77,8 @@ def test_file_negative_size():
 
 def test_file_size_does_not_equal_to_other_type():
     assert FileSize(1) != 1
+
+
+def test_file_code_line_count():
+    fileview = FileTidiness(sample())
+    assert fileview.code_lines == 7

@@ -2,6 +2,7 @@ from enum import Enum
 
 SIZE_SCALE_FACTOR = 1024
 MINIMUM_SIZE = 0
+SIZE_DISPLAY_FORMAT = ".2f"
 
 
 class FileSize:
@@ -12,9 +13,7 @@ class FileSize:
             raise ValueError(f"file size out of bounds [{MINIMUM_SIZE} - {Unit.Infinite.value}]: {size}")
 
     def __eq__(self, other):
-        if type(other) is not FileSize:
-            return False
-        return self.size == other.size
+        return type(other) is FileSize and self.size == other.size
 
     def __str__(self):
 
@@ -22,7 +21,7 @@ class FileSize:
         value = self.size / unit.value
 
         if Unit.Bytes.value < self.size < Unit.Infinite.value:
-            return f"{value:.2f} {unit.name}"
+            return f"{value:{SIZE_DISPLAY_FORMAT}} {unit.name}"
         else:
             return f"{self.size} Byte"
 
